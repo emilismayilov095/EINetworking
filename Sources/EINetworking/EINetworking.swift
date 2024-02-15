@@ -57,7 +57,7 @@ public struct EINetworking {
                 let httpResponse = response as? HTTPURLResponse
                 let statusCode = httpResponse?.statusCode ?? 0
                 
-                throw APIError.invalidResponseStatus("\(httpResponse)")
+                throw APIError.invalidResponseStatus("\(statusCode)")
             }
             
             let decoder = JSONDecoder()
