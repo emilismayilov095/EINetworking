@@ -8,14 +8,14 @@
 import Foundation
 
 
-enum APIError: Error, LocalizedError {
+public enum APIError: Error, LocalizedError {
     case invalidURL
     case invalidResponseStatus
     case dataTaskError(String)
     case corruptData
     case decodingError(String)
     
-    var errorDescription: String? {
+    public var errorDescription: String? {
         switch self {
         case .invalidURL:
             return NSLocalizedString("The endpoint URL is invalid", comment: "")

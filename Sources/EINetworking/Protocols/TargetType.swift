@@ -20,8 +20,21 @@ public protocol TargetType {
 }
 
 public extension TargetType {
+    
+    var parameters: Data? {
+        return nil
+    }
+    
+    var headers: [String: String] {
+        return [:]
+    }
+    
     var timeOut: TimeInterval {
         return 120
+    }
+    
+    var queryItems: [QueryItems] {
+        return []
     }
     
     func asURLRequest() -> URLRequest {
