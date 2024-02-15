@@ -10,7 +10,7 @@ import Foundation
 
 public enum APIError: Error, LocalizedError {
     case invalidURL
-    case invalidResponseStatus
+    case invalidResponseStatus(String)
     case dataTaskError(String)
     case corruptData
     case decodingError(String)
@@ -19,8 +19,8 @@ public enum APIError: Error, LocalizedError {
         switch self {
         case .invalidURL:
             return NSLocalizedString("The endpoint URL is invalid", comment: "")
-        case .invalidResponseStatus:
-            return NSLocalizedString("The status code is invalid", comment: "")
+        case .invalidResponseStatus(let string):
+            return NSLocalizedString("\(string) status code is invalid ", comment: "")
         case .dataTaskError(let string):
             return string
         case .corruptData:

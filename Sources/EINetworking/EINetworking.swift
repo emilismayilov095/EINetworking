@@ -11,7 +11,12 @@ public struct EINetworking {
         
         URLSession.shared.dataTask(with: target.asURLRequest()) { data, response, error in
             guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 else {
-                completion(.failure(.invalidResponseStatus))
+                
+                let httpResponse = response as? HTTPURLResponse
+                let statusCode = httpResponse?.statusCode ?? 0
+                
+                completion(.failure(.invalidResponseStatus("\(statusCode)")))
+                
                 return
             }
             
@@ -49,7 +54,10 @@ public struct EINetworking {
         do {
             let (data, response) = try await URLSession.shared.data(for: target.asURLRequest())
             guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 else {
-                throw APIError.invalidResponseStatus
+                let httpResponse = response as? HTTPURLResponse
+                let statusCode = httpResponse?.statusCode ?? 0
+                
+                throw APIError.invalidResponseStatus("\(statusCode)")
             }
             
             let decoder = JSONDecoder()
