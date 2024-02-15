@@ -4,7 +4,7 @@ public struct EINetworking {
     public static let shared = EINetworking()
     private init() {}
     
-    func asyncRequest<T: Decodable>(_ target: TargetType,
+    public func asyncRequest<T: Decodable>(_ target: TargetType,
                                dateDecodingStrategy: JSONDecoder.DateDecodingStrategy = .deferredToDate,
                                keyDecodingStrategy: JSONDecoder.KeyDecodingStrategy = .useDefaultKeys) async throws -> T {
         do {
@@ -27,12 +27,5 @@ public struct EINetworking {
         } catch {
             throw APIError.dataTaskError(error.localizedDescription)
         }
-    }
-}
-
-
-extension EINetworking {
-    public func set(baseURL: String) {
-        BASE_URL = baseURL
     }
 }

@@ -7,7 +7,6 @@
 
 import Foundation
 
-var BASE_URL = ""
 public typealias QueryItems = (key: String, value: String?)
 
 public protocol TargetType {
@@ -17,16 +16,10 @@ public protocol TargetType {
     var parameters: Data? { get }
     var headers: [String: String] { get }
     var timeOut: TimeInterval { get }
-    var parametersExetension: [String: Any] { get }
     var queryItems: [QueryItems] { get }
 }
 
-extension TargetType {
-    var url: URL {
-        guard let url = URL(string: BASE_URL) else { fatalError("please add baseURL") }
-        return url
-    }
-    
+public extension TargetType {
     var timeOut: TimeInterval {
         return 120
     }
