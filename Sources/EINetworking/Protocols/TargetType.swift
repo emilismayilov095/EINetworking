@@ -13,7 +13,7 @@ public protocol TargetType {
     var url: URL { get }
     var path: String { get }
     var httpMethod: HttpMethod { get }
-    var parameters: Data? { get }
+    var parameters: Encodable? { get }
     var headers: [String: String] { get }
     var timeOut: TimeInterval { get }
     var queryItems: [QueryItems] { get }
@@ -48,7 +48,12 @@ public extension TargetType {
         })
         
         if let body = parameters {
-            urlRequest.httpBody = body
+            do {
+                urlRequest.httpBody = try JSONEncoder().encode(parameters)
+            } catch {
+                print("\(#function) Error encoding data:\nError: \(error)")
+            }
+            
         }
         
         if !queryItems.isEmpty {
