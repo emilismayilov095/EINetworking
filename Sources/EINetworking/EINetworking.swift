@@ -10,13 +10,8 @@ public struct EINetworking {
                                               completion: @escaping (Result<T, APIError>) -> Void) {
         
         URLSession.shared.dataTask(with: target.asURLRequest()) { data, response, error in
-            guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 else {
-                
-                let httpResponse = response as? HTTPURLResponse
-                let statusCode = httpResponse?.statusCode ?? 0
-                
-                completion(.failure(.invalidResponseStatus("\(statusCode)")))
-                
+            guard let httpResponse = response as? HTTPURLResponse, (200...202).contains(httpResponse.statusCode) else {
+                completion(.failure(.invalidResponseStatus("\((response as? HTTPURLResponse)?.statusCode ?? 0)")))
                 return
             }
             
@@ -53,11 +48,8 @@ public struct EINetworking {
                                keyDecodingStrategy: JSONDecoder.KeyDecodingStrategy = .useDefaultKeys) async throws -> T {
         do {
             let (data, response) = try await URLSession.shared.data(for: target.asURLRequest())
-            guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 else {
-                let httpResponse = response as? HTTPURLResponse
-                let statusCode = httpResponse?.statusCode ?? 0
-                
-                throw APIError.invalidResponseStatus("\(statusCode)")
+            guard let httpResponse = response as? HTTPURLResponse, (200...202).contains(httpResponse.statusCode) else {
+                throw APIError.invalidResponseStatus("\((response as? HTTPURLResponse)?.statusCode ?? 0)")
             }
             
             let decoder = JSONDecoder()

@@ -20,15 +20,6 @@ public protocol TargetType {
 }
 
 public extension TargetType {
-    
-    var parameters: Data? {
-        return nil
-    }
-    
-    var headers: [String: String] {
-        return [:]
-    }
-    
     var timeOut: TimeInterval {
         return 120
     }
@@ -50,7 +41,6 @@ public extension TargetType {
         if let body = parameters {
             do {
                 urlRequest.httpBody = try JSONEncoder().encode(body)
-                print(String(data: urlRequest.httpBody ?? Data(), encoding: .utf8)!)
             } catch {
                 print("\(#function) Error encoding data:\nError: \(error)")
             }
