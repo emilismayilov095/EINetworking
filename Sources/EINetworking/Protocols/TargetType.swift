@@ -50,6 +50,7 @@ public extension TargetType {
         if let body = parameters {
             do {
                 urlRequest.httpBody = try JSONEncoder().encode(parameters)
+                print(String(data: urlRequest.httpBody ?? Data(), encoding: .utf8)!)
             } catch {
                 print("\(#function) Error encoding data:\nError: \(error)")
             }
