@@ -13,3 +13,9 @@ public enum HttpMethod: String {
     case put = "PUT"
     case delete = "DELETE"
 }
+
+
+public enum EncodingType {
+    case url
+    case json
+}

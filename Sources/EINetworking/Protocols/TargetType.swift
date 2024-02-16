@@ -15,6 +15,7 @@ public protocol TargetType {
     var httpMethod: HttpMethod { get }
     var parameters: Encodable? { get }
     var headers: [String: String] { get }
+    var encodingType: EncodingType { get }
     var timeOut: TimeInterval { get }
     var queryItems: [QueryItems] { get }
 }
@@ -28,6 +29,10 @@ public extension TargetType {
         return []
     }
     
+    var encodingType: EncodingType {
+        return .json
+    }
+    
     func asURLRequest() -> URLRequest {
         var urlWithPath = url.appendingPathComponent(path)
         var urlRequest = URLRequest(url: urlWithPath)
@@ -38,8 +43,14 @@ public extension TargetType {
             urlRequest.setValue(header.value, forHTTPHeaderField: header.key)
         })
         
+        if encodingType == .json {
+            urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        }
+        
         if let body = parameters {
             do {
+                let encoder = JSONEncoder()
+                
                 urlRequest.httpBody = try JSONEncoder().encode(body)
             } catch {
                 print("\(#function) Error encoding data:\nError: \(error)")
@@ -59,3 +70,4 @@ public extension TargetType {
         return urlRequest
     }
 }
+
