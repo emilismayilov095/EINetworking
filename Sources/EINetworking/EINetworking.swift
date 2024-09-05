@@ -7,6 +7,7 @@ public struct EINetworking {
     public func dispatchRequest<T: Decodable>(target: TargetType,
                                               dateDecodingStrategy: JSONDecoder.DateDecodingStrategy = .deferredToDate,
                                               keyDecodingStrategy: JSONDecoder.KeyDecodingStrategy = .useDefaultKeys,
+                                              withLogs: Bool = true,
                                               completion: @escaping (Result<T, APIError>) -> Void) {
         
         URLSession.shared.dataTask(with: target.asURLRequest()) { data, response, error in
@@ -39,13 +40,23 @@ public struct EINetworking {
                 }
             }
             
+            if withLogs {
+                print("---- REQUEST BEGIN ------------------------")
+                print("URL:         ", target.path)
+                print("HEADERS:     ", target.headers)
+                print("PARAMS:      ", target.parameters ?? [:])
+                print("RESPONSE:    ","\(data.prettyPrintedJSONString ?? "")")
+                print("---- REQUEST END --------------------------")
+            }
+            
         }
         .resume()
     }
     
     public func asyncRequest<T: Decodable>(target: TargetType,
                                dateDecodingStrategy: JSONDecoder.DateDecodingStrategy = .deferredToDate,
-                               keyDecodingStrategy: JSONDecoder.KeyDecodingStrategy = .useDefaultKeys) async throws -> T {
+                               keyDecodingStrategy: JSONDecoder.KeyDecodingStrategy = .useDefaultKeys,
+                                           withLogs: Bool = true) async throws -> T {
         do {
             let (data, response) = try await URLSession.shared.data(for: target.asURLRequest())
             guard let httpResponse = response as? HTTPURLResponse, (200...202).contains(httpResponse.statusCode) else {
@@ -56,12 +67,23 @@ public struct EINetworking {
             decoder.dateDecodingStrategy = dateDecodingStrategy
             decoder.keyDecodingStrategy = keyDecodingStrategy
             
+            if withLogs {
+                print("---- REQUEST BEGIN ------------------------")
+                print("URL:         ", target.path)
+                print("HEADERS:     ", target.headers)
+                print("PARAMS:      ", target.parameters ?? [:])
+                print("RESPONSE:    ","\(data.prettyPrintedJSONString ?? "")")
+                print("---- REQUEST END --------------------------")
+            }
+            
             do {
                 let decodedData = try decoder.decode(T.self, from: data)
                 return decodedData
             } catch (let error){
                 throw APIError.decodingError(error.localizedDescription)
             }
+            
+           
             
         } catch {
             throw APIError.dataTaskError(error.localizedDescription)
