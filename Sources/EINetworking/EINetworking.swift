@@ -17,6 +17,11 @@ public struct EINetworking {
             }
             
             guard error == nil else {
+                if withLogs {
+                    print("---- DATA TASK ERROR ------------------------")
+                    print(error?.localizedDescription ?? "unknown error")
+                    print("---- DATA TASK ERROR --------------------------")
+                }
                 completion(.failure(.dataTaskError(error?.localizedDescription ?? "unknown error")))
                 return
             }
@@ -35,6 +40,11 @@ public struct EINetworking {
                     let decodedData = try decoder.decode(T.self, from: data)
                     completion(.success(decodedData))
                 } catch (let error){
+                    if withLogs {
+                        print("---- DECODING ERROR ------------------------")
+                        print(error.localizedDescription)
+                        print("---- DECODING ERROR --------------------------")
+                    }
                     completion(.failure(.decodingError(error.localizedDescription)))
                     return
                 }
