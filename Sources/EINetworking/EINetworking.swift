@@ -52,7 +52,7 @@ public struct EINetworking {
             
             if withLogs {
                 print("---- REQUEST BEGIN ------------------------")
-                print("URL:         ", target.path)
+                print("URL:         ", target.asURLRequest().url?.absoluteString ?? "")
                 print("HEADERS:     ", target.headers)
                 print("PARAMS:      ", target.parameters ?? [:])
                 print("RESPONSE:    ","\(data.prettyPrintedJSONString ?? "")")
