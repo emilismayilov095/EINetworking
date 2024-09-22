@@ -34,7 +34,11 @@ public extension TargetType {
     }
     
     func asURLRequest() -> URLRequest {
-        var urlWithPath = url.appending(path: path)
+        let url = URL(string: url.absoluteString)
+        let path = path
+        var urlWithPath = url.flatMap { URL(string: $0.absoluteString + path) } ?? URL(fileURLWithPath: "")
+        
+       // var urlWithPath = url.appendingPathComponent(path)
         var urlRequest = URLRequest(url: urlWithPath)
         
         urlRequest.httpMethod = httpMethod.rawValue
