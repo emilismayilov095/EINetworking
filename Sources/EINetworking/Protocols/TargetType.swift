@@ -34,7 +34,7 @@ public extension TargetType {
     }
     
     func asURLRequest() -> URLRequest {
-        var urlWithPath = url.appendingPathComponent(path)
+        var urlWithPath = url //.appendingPathComponent(path)
         var urlRequest = URLRequest(url: urlWithPath)
         
         urlRequest.httpMethod = httpMethod.rawValue
@@ -50,7 +50,6 @@ public extension TargetType {
         if let body = parameters {
             do {
                 let encoder = JSONEncoder()
-                
                 urlRequest.httpBody = try JSONEncoder().encode(body)
             } catch {
                 print("\(#function) Error encoding data:\nError: \(error)")
