@@ -12,6 +12,9 @@ public struct EINetworking {
         
         URLSession.shared.dataTask(with: target.asURLRequest()) { data, response, error in
             guard let httpResponse = response as? HTTPURLResponse, (200...202).contains(httpResponse.statusCode) else {
+                print(data)
+                print(response)
+                print(error)
                 completion(.failure(.invalidResponseStatus("\((response as? HTTPURLResponse)?.statusCode ?? 0)")))
                 return
             }
